@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Micio-Wallet - Gestionale Scout</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+    iframe {
+      width: 100%;
+      height: 100vh;
+      border: none;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <iframe src="https://script.google.com/macros/s/AKfycbwXJRYebWqKQpsHfWckv09C98lIQzq5DyWsYUZMvF6MuyJpL1infv0dmwzZ65ef8DwD/exec"
+          allow="clipboard-write"
+          title="Micio-Wallet"></iframe>
+</body>
+</html>
