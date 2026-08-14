@@ -22,9 +22,20 @@
   </style>
 </head>
 <body>
-  <iframe src="https://script.google.com/macros/s/AKfycbwXJRYebWqKQpsHfWckv09C98lIQzq5DyWsYUZMvF6MuyJpL1infv0dmwzZ65ef8DwD/exec"
-          allow="clipboard-write"
+  <iframe id="micio-wallet-frame"
+          src="https://script.google.com/macros/s/AKfycbwXJRYebWqKQpsHfWckv09C98lIQzq5DyWsYUZMvF6MuyJpL1infv0dmwzZ65ef8DwD/exec"
+          allow="clipboard-write; web-share"
           title="Micio-Wallet"></iframe>
+  <script>
+    // Aggiunge un parametro univoco all'URL dell'iframe ad ogni caricamento della pagina,
+    // per evitare che il browser (o proxy intermedi) servano una versione cachata dell'app
+    // dopo una nuova distribuzione su Apps Script.
+    (function() {
+      const frame = document.getElementById('micio-wallet-frame');
+      const separatore = frame.src.indexOf('?') === -1 ? '?' : '&';
+      frame.src = frame.src + separatore + 'cachebust=' + Date.now();
+    })();
+  </script>
 
   <!-- AGGIUNTA: overlay che blocca l'uso in orizzontale su mobile -->
   <div id="rotate-overlay" style="
