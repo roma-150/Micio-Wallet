@@ -13,7 +13,6 @@
     html, body {
       margin: 0;
       padding: 0;
-      height: 100%;
       overflow: hidden;
       background: rgb(70, 38, 120);
     }
@@ -21,16 +20,24 @@
       position: fixed;
       top: 0;
       left: 0;
-      right: 0;
-      bottom: 0;
       width: 100%;
-      height: 100%;
       border: none;
       display: block;
+    }
+    #notch-cover {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: env(safe-area-inset-top, 0px);
+      background: rgb(70, 38, 120);
+      z-index: 10;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
+  <div id="notch-cover"></div>
   <iframe id="micio-wallet-frame"
           src="https://script.google.com/macros/s/AKfycbwSAUYQv-tppaPpPKDQrVXtvkID5SXG1MAGZX2MzvO5L6qIynGNjFr-TkcRKTxkUo-R/exec"
           allow="clipboard-write; web-share"
@@ -43,6 +50,21 @@
       const frame = document.getElementById('micio-wallet-frame');
       const separatore = frame.src.indexOf('?') === -1 ? '?' : '&';
       frame.src = frame.src + separatore + 'cachebust=' + Date.now();
+    })();
+
+    // Imposta l'altezza reale dell'iframe via JS (invece di vh/dvh in CSS,
+    // notoriamente inaffidabili su iOS in modalità standalone da Home Screen).
+    (function() {
+      const frame = document.getElementById('micio-wallet-frame');
+      function ridimensionaFrame() {
+        frame.style.height = window.innerHeight + 'px';
+      }
+      ridimensionaFrame();
+      window.addEventListener('resize', ridimensionaFrame);
+      window.addEventListener('orientationchange', ridimensionaFrame);
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', ridimensionaFrame);
+      }
     })();
   </script>
 
