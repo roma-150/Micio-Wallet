@@ -2,10 +2,7 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="rgb(70, 38, 120)">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Micio-Wallet</title>
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="apple-touch-icon" href="apple-touch-icon-v2.png">
@@ -13,31 +10,18 @@
     html, body {
       margin: 0;
       padding: 0;
+      height: 100%;
       overflow: hidden;
-      background: rgb(70, 38, 120);
     }
     iframe {
-      position: fixed;
-      top: 0;
-      left: 0;
       width: 100%;
+      height: 100vh;
       border: none;
       display: block;
-    }
-    #notch-cover {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: env(safe-area-inset-top, 0px);
-      background: rgb(70, 38, 120);
-      z-index: 10;
-      pointer-events: none;
     }
   </style>
 </head>
 <body>
-  <div id="notch-cover"></div>
   <iframe id="micio-wallet-frame"
           src="https://script.google.com/macros/s/AKfycbwSAUYQv-tppaPpPKDQrVXtvkID5SXG1MAGZX2MzvO5L6qIynGNjFr-TkcRKTxkUo-R/exec"
           allow="clipboard-write; web-share"
@@ -51,23 +35,7 @@
       const separatore = frame.src.indexOf('?') === -1 ? '?' : '&';
       frame.src = frame.src + separatore + 'cachebust=' + Date.now();
     })();
-
-    // Imposta l'altezza reale dell'iframe via JS (invece di vh/dvh in CSS,
-    // notoriamente inaffidabili su iOS in modalità standalone da Home Screen).
-    (function() {
-      const frame = document.getElementById('micio-wallet-frame');
-      function ridimensionaFrame() {
-        frame.style.height = window.innerHeight + 'px';
-      }
-      ridimensionaFrame();
-      window.addEventListener('resize', ridimensionaFrame);
-      window.addEventListener('orientationchange', ridimensionaFrame);
-      if (window.visualViewport) {
-        window.visualViewport.addEventListener('resize', ridimensionaFrame);
-      }
-    })();
   </script>
-
   <!-- AGGIUNTA: overlay che blocca l'uso in orizzontale su mobile -->
   <div id="rotate-overlay" style="
     display: none;
@@ -87,7 +55,6 @@
     <p style="font-size: 18px; font-weight: 600;">Ruota il telefono in verticale</p>
     <p style="font-size: 14px; opacity: 0.7; margin-top: 8px;">Questa app è ottimizzata solo per l'uso in verticale</p>
   </div>
-
   <style>
     @media screen and (max-width: 926px) and (orientation: landscape) {
       #rotate-overlay {
