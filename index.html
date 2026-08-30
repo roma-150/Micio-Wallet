@@ -8,7 +8,6 @@
   <link rel="apple-touch-icon" href="apple-touch-icon-v2.png">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#462678">
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -28,7 +27,6 @@
   </style>
 </head>
 <body>
-  <div id="wrapper-google-login-container" style="display:none; position:fixed; top:calc(env(safe-area-inset-top) + 16px); left:50%; transform:translateX(-50%); z-index:10000;"></div>
   <iframe id="micio-wallet-frame"
           src="https://script.google.com/macros/s/AKfycbwSAUYQv-tppaPpPKDQrVXtvkID5SXG1MAGZX2MzvO5L6qIynGNjFr-TkcRKTxkUo-R/exec"
           allow="clipboard-write; web-share"
@@ -42,57 +40,6 @@
       const separatore = frame.src.indexOf('?') === -1 ? '?' : '&';
       frame.src = frame.src + separatore + 'cachebust=' + Date.now();
     })();
-  </script>
-  <script>
-    // Bottone "Accedi con Google" vero e proprio: vive qui (dominio roma-150.github.io,
-    // l'unico che Google può autorizzare) e passa il token all'app dentro l'iframe via postMessage,
-    // perché Apps Script serve il contenuto da un'origine *.googleusercontent.com che Google
-    // rifiuta categoricamente come origine autorizzabile per Google Identity Services.
-    const MICIO_WALLET_GOOGLE_CLIENT_ID = '852303375716-v2gr39b7b2chjnneqlq4ordp7tlvpojh.apps.googleusercontent.com';
-    let googleLoginWrapperInizializzato = false;
-
-    function inizializzaLoginGoogleWrapper() {
-      if (googleLoginWrapperInizializzato) return;
-      if (typeof google === 'undefined' || !google.accounts || !google.accounts.id) {
-        setTimeout(inizializzaLoginGoogleWrapper, 200);
-        return;
-      }
-      googleLoginWrapperInizializzato = true;
-
-      google.accounts.id.initialize({
-        client_id: MICIO_WALLET_GOOGLE_CLIENT_ID,
-        callback: function(risposta) {
-          const frame = document.getElementById('micio-wallet-frame');
-          if (frame && frame.contentWindow) {
-            frame.contentWindow.postMessage({ tipo: 'google-login-success', credential: risposta.credential }, '*');
-          }
-          document.getElementById('wrapper-google-login-container').style.display = 'none';
-        },
-        auto_select: false
-      });
-
-      google.accounts.id.renderButton(document.getElementById('wrapper-google-login-container'), {
-        theme: 'outline', size: 'medium', text: 'signin_with'
-      });
-    }
-
-    window.addEventListener('load', inizializzaLoginGoogleWrapper);
-
-    // L'app dentro l'iframe chiede di mostrare/nascondere il bottone (es. lo nasconde
-    // appena entra nella dashboard di un'unità, per non lasciarlo lì a galleggiare)
-    function origineFidataDaIframe(origin) {
-      return origin.indexOf('script.google.com') !== -1 || origin.indexOf('script.googleusercontent.com') !== -1;
-    }
-
-    window.addEventListener('message', function(e) {
-      if (!origineFidataDaIframe(e.origin)) return;
-      if (!e.data || typeof e.data !== 'object') return;
-      if (e.data.tipo === 'mostra-login-google') {
-        document.getElementById('wrapper-google-login-container').style.display = 'block';
-      } else if (e.data.tipo === 'nascondi-login-google') {
-        document.getElementById('wrapper-google-login-container').style.display = 'none';
-      }
-    });
   </script>
   <!-- AGGIUNTA: overlay che blocca l'uso in orizzontale su mobile -->
   <div id="rotate-overlay" style="
