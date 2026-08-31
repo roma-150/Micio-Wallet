@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Micio-Wallet</title>
+</head>
+<body style="font-family:sans-serif; padding:20px; text-align:center;">
+  <p>Login completato, puoi chiudere questa finestra.</p>
+  <script>
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var code = params.get('code');
+      if (window.opener && code) {
+        window.opener.postMessage({ tipo: 'oauth-code-received', code: code }, '*');
+      }
+      setTimeout(function() { window.close(); }, 500);
+    })();
+  </script>
+</body>
+</html>
